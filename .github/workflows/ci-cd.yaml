@@ -9,12 +9,14 @@ env:
 
 jobs:
   build-and-push:
-    name: Build & Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Show repo contents (debug)
+        run: ls -R
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -40,8 +42,8 @@ jobs:
       - name: Build & Push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./myapp          # 👈 build context is the myapp folder
+          file: ./myapp/Dockerfile  # 👈 Dockerfile path inside myapp
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
